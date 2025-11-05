@@ -1,27 +1,58 @@
+import java.io.*;
+
 public class PracticeProblem {
 
-    public static void main(String[] args) {
-    
-    }
 
     public static String readFile(String filename) {
-        StringBuilder sb = new StringBuilder();
-        try (java.io.FileReader fr = new java.io.FileReader(filename)) {
-            int ch;
-            while ((ch = fr.read()) != -1) {
-                sb.append((char) ch);
+        FileReader inputStream = null;
+        StringBuilder content = new StringBuilder();
+
+        try {
+            inputStream = new FileReader(filename);
+
+            int c;
+            while ((c = inputStream.read()) != -1) {
+                content.append((char) c);
             }
-        } catch (java.io.IOException e) {
-            return "";
         }
-        return sb.toString();
+        catch (IOException e) {
+            System.out.println(e);
+        }
+        finally {
+            try {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+            }
+            catch (IOException e) {
+                System.out.println(e);
+            }
+        }
+
+      
+        return content.toString();
     }
 
+    
     public static String backwardsReadFile(String filename) {
-        String s = readFile(filename);
-        if (s.isEmpty()) return "";
-        return new StringBuilder(s).reverse().toString();
+        String fileDatas = readFile(filename);
+        StringBuilder reversed = new StringBuilder(fileDatas);
+        return reversed.reverse().toString();
     }
 
+    public static void main(String[] args) {
+        String filename = "file.txt";
+        String normal = readFile(filename);
+        System.out.println("Normal:\n" + normal);
+        String backwards = backwardsReadFile(filename);
+        System.out.println("\nBackwards:\n" + backwards);
+    }
 
-}
+    // // Optional test harness
+    // public static void main(String[] args) {
+    //     System.out.println("=== readFile(file2.txt) ===");
+    //     System.out.println(readFile("file2.txt"));
+
+    //     System.out.println("=== backwardsReadFile(file2.txt) ===");
+    //     System.out.println(backwardsReadFile("file2.txt"));
+    }
